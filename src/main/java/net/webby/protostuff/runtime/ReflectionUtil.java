@@ -1,5 +1,7 @@
 package net.webby.protostuff.runtime;
 
+import io.protostuff.runtime.ArraySchemas;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -43,6 +45,9 @@ public final class ReflectionUtil {
 	public static Pair<RuntimeSchemaType, Class<?>> normalizeSchemaClass(Class<?> schemaClass) {
 		while (schemaClass != Object.class) {
 			RuntimeSchemaType type = RuntimeSchemaType.findByName(schemaClass.getSimpleName());
+			if(type == null && ArraySchemas.Base.class.isAssignableFrom(schemaClass)){
+				type = RuntimeSchemaType.ArraySchema;
+			}
 			if (type != null) {
 				return new Pair<RuntimeSchemaType, Class<?>>(type, schemaClass);
 			}
